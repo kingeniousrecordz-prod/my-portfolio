@@ -75,21 +75,34 @@ export default function AdminDashboard() {
   const uploadFile = async (file: File, type: 'audio' | 'image'): Promise<string> => {
     setUploadingFile(true)
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('type', type)
+      // Generate unique filename
+      const timestamp = Date.now()
+      const fileExtension = file.name.split('.').pop()
+      const filename = `${timestamp}-${Math.random().toString(36).substring(2)}.${fileExtension}`
+      
+      // Upload directly to Supabase Storage from client
+      const { createClient } = await import('@supabase/supabase-js')
+      
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://qkhaahiruamqviuhrndp.supabase.co'
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFraGFhaGlydWFtcXZpdWhybmRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzMTQzNjUsImV4cCI6MjA3Njg5MDM2NX0.c0kVV6OPH0XWvIudvnIQewO6EFd2F8aI2vWrb2rj5Bg'
+      
+      const supabase = createClient(supabaseUrl, supabaseAnonKey)
+      
+      const { data, error } = await supabase.storage
+        .from('uploads')
+        .upload(`${type}/${filename}`, file)
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      })
-
-      if (!response.ok) {
-        throw new Error('Upload failed')
+      if (error) {
+        console.error('Supabase upload error:', error)
+        throw new Error('Upload failed: ' + error.message)
       }
 
-      const data = await response.json()
-      return data.url
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('uploads')
+        .getPublicUrl(data.path)
+
+      return publicUrl
     } catch (error) {
       console.error('Upload error:', error)
       throw error
