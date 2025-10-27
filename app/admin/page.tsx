@@ -133,7 +133,7 @@ export default function AdminDashboard() {
     try {
       const method = editingBeat ? 'PUT' : 'POST'
       const response = await fetch('/api/beats', {
- conséquencesethod,
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editingBeat ? { ...beatData, id: editingBeat.id } : beatData)
       })
