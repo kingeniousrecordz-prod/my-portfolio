@@ -1,5 +1,5 @@
 {
-  "buildCommand": "next build",
+  "buildCommand": "CI=false next build",
   "framework": "nextjs",
   "regions": ["iad1"]
 }
