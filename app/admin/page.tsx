@@ -74,7 +74,20 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchData()
+    fetchSettings()
   }, [])
+
+  const fetchSettings = async () => {
+    try {
+      const response = await fetch('/api/settings')
+      if (response.ok) {
+        const data = await response.json()
+        setSettings({ ...settings, ...data })
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error)
+    }
+  }
 
   const fetchData = async () => {
     try {
@@ -198,6 +211,33 @@ export default function AdminDashboard() {
       } catch (error) {
         console.error('Error deleting beat:', error)
       }
+    }
+  }
+
+  const handleSettingsSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const formData = new FormData(e.target as HTMLFormElement)
+    const settingsData = Object.fromEntries(formData.entries())
+    
+    try {
+      const response = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settingsData)
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        alert(`Error: ${errorData.error || 'Failed to save settings'}`)
+        return
+      }
+      
+      // Update state
+      setSettings({ ...settings, ...settingsData } as Settings)
+      alert('Settings saved successfully!')
+    } catch (error) {
+      console.error('Error saving settings:', error)
+      alert('Failed to save settings')
     }
   }
 
