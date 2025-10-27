@@ -38,6 +38,18 @@ interface Beat {
   duration?: number
 }
 
+interface Settings {
+  name: string
+  bio: string
+  tagline: string
+  location: string
+  email: string
+  github_url: string
+  linkedin_url: string
+  twitter_url: string
+  profile_image_url: string
+}
+
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('projects')
   const [projects, setProjects] = useState<Project[]>([])
@@ -48,6 +60,17 @@ export default function AdminDashboard() {
   const [showBeatForm, setShowBeatForm] = useState(false)
   const [loading, setLoading] = useState(true)
   const [uploadingFile, setUploadingFile] = useState(false)
+  const [settings, setSettings] = useState<Settings>({
+    name: 'Your Name',
+    bio: 'Passionate web developer using AI pair programming, creative graphic designer, and music producer.',
+    tagline: 'Web Developer, Graphic Designer & Beatmaker',
+    location: 'Your City, Country',
+    email: 'contact@example.com',
+    github_url: 'https://github.com',
+    linkedin_url: 'https://linkedin.com',
+    twitter_url: 'https://twitter.com',
+    profile_image_url: '/images/profile.jpg'
+  })
 
   useEffect(() => {
     fetchData()
