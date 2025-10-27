@@ -414,8 +414,8 @@ export default function AdminDashboard() {
           >
             <h2 className="text-2xl font-semibold mb-6">Settings</h2>
             <div className="card max-w-2xl">
-              <h3 className="text-lg font-semibold mb-4">Site Information</h3>
-              <form className="space-y-4">
+              <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
+              <form onSubmit={handleSettingsSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">Site Title</label>
                   <input
