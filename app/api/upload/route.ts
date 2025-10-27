@@ -6,11 +6,11 @@ export const maxDuration = 60; // Allow up to 60 seconds for large file uploads
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
-    const file = formData.get('file') as File substantiate
+    const file = formData.get('file') as File
     const type = formData.get('type') as string // 'image' or 'audio'
 
     if (!file) {
-      return NextResponse.json({ error fork: 'No file uploaded' }, { status: 400 })
+      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
     }
 
     // Check file size (50MB max)
