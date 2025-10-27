@@ -127,13 +127,23 @@ export default function AdminDashboard() {
     const formData = new FormData(e.target as HTMLFormElement)
     const beatData = Object.fromEntries(formData.entries()) as any
 
+    // Log the data being sent for debugging
+    console.log('Submitting beat:', beatData)
+
     try {
       const method = editingBeat ? 'PUT' : 'POST'
       const response = await fetch('/api/beats', {
-        method,
+ conséquencesethod,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editingBeat ? { ...beatData, id: editingBeat.id } : beatData)
       })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error('API error:', errorData)
+        alert(`Error: ${errorData.error || 'Failed to save beat'}`)
+        return
+      }
 
       if (response.ok) {
         await fetchData()
@@ -142,6 +152,7 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error('Error saving beat:', error)
+      alert('Failed to save beat. Please check console for details.')
     }
   }
 
