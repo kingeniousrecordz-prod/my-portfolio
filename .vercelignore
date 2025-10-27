@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+scripts
+*.bat
+*.log
+cache
+.turbo
+.DS_Store
+Thumbs.db
+

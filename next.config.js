@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   images: {
     domains: ['localhost'],
   },
+  swcMinify: true,
 }
 
 module.exports = nextConfig
